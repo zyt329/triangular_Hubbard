@@ -1,0 +1,40 @@
+"#" in NLCE_1_#.txt file name is the order number, meaning that all the 
+clusters listed in NLCE_1_#.txt will have # number of sites.
+
+Here is the structure of each NLCE_1_#.txt file:
+
+- The very first number at the top of each file is simply #, the order
+number. It is indicated only for bookkeeping purposes and can be ignored.
+
+- After that the cluster information begins: 
+   - The first number in each block is simply the index for the 
+     topologically distinct cluster that is represented in that block.
+     Indices start from 0 and go up to the total number of such clusters
+     in the corresponding NLCE order -1. Each block is separated by 
+     a blank line from the next one.
+
+   - The second number in each block is the number of bonds in the 
+     cluster (nB). 
+
+   - The next nB lines contain the bond information. They are in the 
+     following format: site1, site2, type, where site1 and site2 are 
+     the two sites at the two ends of the bond and type is the bond
+     type (in the case where we have more than one type, e.g., when 
+     n.n.n. bonds are also considered).
+
+   - The number in the line after the bond information is the number 
+     of topologically distinct subclusters this cluster has (sc_Num).
+
+   - The next sc_Num lines contain the subcluster information. They 
+     are in the following format: m, L, topo idx, where m is the order 
+     the subcluster belongs to (the number of sites it has), L is the 
+     lattice constant for this subcluster being embedded in the current  
+     cluster, and topo idx is the index of the subcluster in order m.
+
+   - The lines after "# Topo. # : Multp" contain lattice constants,
+     per site, for each of the preceeding clusters for their embeddings 
+     in the lattice in the thermodynamic limit. 
+
+The Python script Part_2_&_3_NLCE_Ehsan_Triangular.py can be called 
+to read in these information, up to some order, and calculate NLCE sums
+for properties of the Ising model on this lattice geometry.
