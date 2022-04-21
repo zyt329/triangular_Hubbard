@@ -1,4 +1,4 @@
- # mu, T log(Z), <E>, <E^2>-<E>^2, <N>,  <N^2>-<N>^2, <E N>-<E><N>, <Sz>, <Sz^2>-<Sz>^2, Doub. Occ., <SzSz>_nn,  Entropy
+ # mu, T, log(Z), <E>, <E^2>-<E>^2, <N>,  <N^2>-<N>^2, <E N>-<E><N>, <Sz>, <Sz^2>-<Sz>^2, Doub. Occ., <SzSz>_nn,  Entropy
     0.57000000E+01    0.57268760E-01          Infinity               NaN               NaN               NaN               NaN               NaN               NaN               NaN               NaN               NaN               NaN
     0.57000000E+01    0.62038507E-01          Infinity               NaN               NaN               NaN               NaN               NaN               NaN               NaN               NaN               NaN               NaN
     0.57000000E+01    0.67205513E-01          Infinity               NaN               NaN               NaN               NaN               NaN               NaN               NaN               NaN               NaN               NaN
