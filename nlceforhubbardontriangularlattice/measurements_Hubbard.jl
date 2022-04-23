@@ -23,15 +23,15 @@ function E_Quants(;N::Int64, sectors_info::Dict{Symbol,Any}, bonds::Array{Array{
     for N_up=0:N, N_dn=0:N
         #println("N_up=$N_up, N_dn=$N_dn")
         # construct hamiltonian for the sector and diagonalize
-        H_m = H_sector(;t=1.0, U=1.0, N=N, N_up=N_up, N_dn=N_dn, sectors_info=sectors_info, bonds=bonds)
+        H_m = H_sector(;t=1.0, U=10.0, N=N, N_up=N_up, N_dn=N_dn, sectors_info=sectors_info, bonds=bonds)
         (Es, states) = eigen(Hermitian(Matrix(H_m)))
         # calculate quantiies for each eigenstate
         for (ind, En) in enumerate(Es)
             push!(E, En)
-            push!(Esq, Es[ind]^2)
-            push!(M, ((N_up-N_dn)*1/2))
+            push!(Esq, En^2)
+            push!(M, (N_up-N_dn)*1/2)
             push!(Msq, ((N_up-N_dn)*1/2)^2)
-            push!(N_tot, N_up+N_dn)
+            push!(N_tot, (N_up+N_dn))
         end
     end
     return [E, Esq, M, Msq, N_tot]
