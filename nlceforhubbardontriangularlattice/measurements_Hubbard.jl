@@ -13,7 +13,7 @@
     Output:
         [E, Quantity1, Quantity2...]. E, Quantity1, Quantity2... are all arrays of length 2^N
 """
-function E_Quants(;N::Int64, sectors_info::Dict{Symbol,Any}, bonds::Array{Array{Int,1},1})
+function E_Quants(;N::Int64, U::Real, t::Real, sectors_info::Dict{Symbol,Any}, bonds::Array{Array{Int,1},1})
     #P::Float64 = 0
     E = Float64[]
     Esq = Float64[]
@@ -23,7 +23,7 @@ function E_Quants(;N::Int64, sectors_info::Dict{Symbol,Any}, bonds::Array{Array{
     for N_up=0:N, N_dn=0:N
         #println("N_up=$N_up, N_dn=$N_dn")
         # construct hamiltonian for the sector and diagonalize
-        H_m = H_sector(;t=1.0, U=10.0, N=N, N_up=N_up, N_dn=N_dn, sectors_info=sectors_info, bonds=bonds)
+        H_m = H_sector(;t=t, U=U, N=N, N_up=N_up, N_dn=N_dn, sectors_info=sectors_info, bonds=bonds)
         (Es, states) = eigen(Hermitian(Matrix(H_m)))
         # calculate quantiies for each eigenstate
         for (ind, En) in enumerate(Es)
@@ -67,7 +67,7 @@ end=#
 function printing(Quantities; Quant_names = quant_names, name = "test", NTOP::Int64,N::Int64)
     #println(Quantities)
     open(
-        "D:/UC Davis/Research/triangular_Hubbard/desktop_files/triangular_Hubbard/nlceforhubbardontriangularlattice/Hubbard_data/"*name*"_$(N)_$(NTOP)"*".dat",
+        "./Hubbard_data/"*name*"_$(N)_$(NTOP)"*".dat",
         "w",
     ) do io
         writedlm(io, quant_names)
@@ -88,11 +88,11 @@ end
     return:
         An array of thermal average of quantities at temperature of T
 """
-function thermal_avg(;T::Real, name::String = "test", NTOP::Int64, N::Int64)
+function thermal_avg(;T::Real, μ::Real, name::String = "test", NTOP::Int64, N::Int64)
     # read in the data from file
     global quantities
     open(
-        "D:/UC Davis/Research/triangular_Hubbard/desktop_files/triangular_Hubbard/nlceforhubbardontriangularlattice/Hubbard_data/"*name*"_$(N)_$(NTOP)"*".dat",
+        "./Hubbard_data/"*name*"_$(N)_$(NTOP)"*".dat",
         "r",
     ) do io
         quantities=readdlm(io, skipstart=1) # skip the first line
@@ -111,13 +111,13 @@ function thermal_avg(;T::Real, name::String = "test", NTOP::Int64, N::Int64)
     Msq_avg::Float64 = 0
     N_tot_avg::Float64 = 0
     for (n, En) in enumerate(E)
-            P = exp(-β*En)
-            Z += P
-            E_avg += En * P
-            Esq_avg += Esq[n] * P
-            M_avg += M[n] * P
-            Msq_avg += Msq[n] * P
-            N_tot_avg += N_tot[n] * P
+        P = exp(-β*(En-μ*N_tot[n]))
+        Z += P
+        E_avg += En * P
+        Esq_avg += Esq[n] * P
+        M_avg += M[n] * P
+        Msq_avg += Msq[n] * P
+        N_tot_avg += N_tot[n] * P
     end
     return [Z E_avg Esq_avg M_avg Msq_avg N_tot_avg]
 end
