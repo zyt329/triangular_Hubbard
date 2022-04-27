@@ -19,10 +19,11 @@ function single_site_quantities(;Ts, μ::Real, U::Real)
         push!(Msq , (1/2*exp(β*μ))/Zt)
         push!(N_tot , (2*exp(β*μ)+2*exp(-β*U+2β*μ))/Zt)
     end
-    return [E,Esq, M, Msq, N_tot]
+    return [Z, E,Esq, M, Msq, N_tot]
 end
 
-#single_site_quantities(Ts=[1.0,2.0],μ=0.0,U=1.0)
+result = single_site_quantities(Ts=[1.0,100],μ=5.0,U=10.0)
+println(result[1])
 #=
 using Plots
 

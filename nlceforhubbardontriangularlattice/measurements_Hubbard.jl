@@ -124,6 +124,10 @@ end
 
 quant_names = ['E' "Esq" 'M' "Msq" "N_tot"]
 #=
-quantities = E_Quants(N=N, sectors_info=sectors_info, bonds=bonds)
-printing(quantities; Quant_names = quant_names, name = "test", NTOP=NTOP)
-thermal_avg(;T=T, name = "test", NTOP=NTOP)=#
+Main.include("Hubbard.jl")
+bonds=[[1,2]]
+N=2; NTOP=0
+sectors_info = sectors_info_gen(N=N)
+quantities = E_Quants(N=N, U=10.0, t=1.0, sectors_info=sectors_info, bonds=bonds)
+#printing(quantities; Quant_names = quant_names, name = "test", NTOP=NTOP)
+thermal_avg(;T=100,μ=5.0, name = "test",N=N, NTOP=NTOP)=#
