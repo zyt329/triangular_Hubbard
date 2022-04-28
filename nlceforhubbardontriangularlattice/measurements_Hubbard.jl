@@ -81,15 +81,10 @@ end
 # Quantities = E_Quants(;N=N, sectors_info=sectors_info, bonds=bonds)
 
 # printing(Quantities; name = "test_print2txt", NTOP=1)
-
-
 """
-    do thermal average of quantities read from the file created by E_Quants() and printing()
-    return:
-        An array of thermal average of quantities at temperature of T
+    Reading in quantities of a cluster of order N and topological number NTOP, from the files with the name passed in.
 """
-function thermal_avg(;T::Real, μ::Real, name::String = "test", NTOP::Int64, N::Int64)
-    # read in the data from file
+function reading_quantities(;name::String = "test", NTOP::Int64, N::Int64)
     global quantities
     open(
         "./Hubbard_data/"*name*"_$(N)_$(NTOP)"*".dat",
@@ -97,6 +92,17 @@ function thermal_avg(;T::Real, μ::Real, name::String = "test", NTOP::Int64, N::
     ) do io
         quantities=readdlm(io, skipstart=1) # skip the first line
     end
+    return quantities
+end
+
+
+"""
+    do thermal average of quantities read from the file created by E_Quants() and printing()
+    return:
+        An array of thermal average of quantities at temperature of T
+"""
+function thermal_avg(;T::Real, μ::Real, quantities)
+    # passing in quantities
     E::Array{Float64, 1} = quantities[:, 1]
     Esq::Array{Float64, 1} = quantities[:, 2]
     M::Array{Float64, 1} = quantities[:, 3]
@@ -120,6 +126,28 @@ function thermal_avg(;T::Real, μ::Real, name::String = "test", NTOP::Int64, N::
         N_tot_avg += N_tot[n] * P
     end
     return [Z E_avg Esq_avg M_avg Msq_avg N_tot_avg]
+end
+
+"""
+    Read in quantities(eigen energies and corresponding average quantities of eigenstates), a range of temperatures at which we want to calculate the thermal average. Out put thermal average of quantities at the read-in temperatures.
+"""
+function thermal_avg_loop(;Temps, μ::Real, quantities)
+    Zs = Float64[]
+    E_avgs = Float64[]
+    Esq_avgs = Float64[]
+    M_avgs = Float64[]
+    Msq_avgs = Float64[]
+    N_tot_avgs = Float64[]
+    for T in Temps
+        avgs_T = thermal_avg(T=T, μ=μ, quantities = quantities)
+        push!(Zs, avgs_T[1])
+        push!(E_avgs, avgs_T[2])
+        push!(Esq_avgs, avgs_T[3])
+        push!(M_avgs, avgs_T[4])
+        push!(Msq_avgs, avgs_T[5])
+        push!(N_tot_avgs, avgs_T[6])
+    end
+    return [Zs, E_avgs, Esq_avgs, M_avgs, Msq_avgs, N_tot_avgs]
 end
 
 quant_names = ['E' "Esq" 'M' "Msq" "N_tot"]
