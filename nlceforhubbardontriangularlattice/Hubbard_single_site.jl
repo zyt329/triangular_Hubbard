@@ -22,8 +22,8 @@ function single_site_quantities(;Ts, μ::Real, U::Real)
     return [Z, E,Esq, M, Msq, N_tot]
 end
 
-result = single_site_quantities(Ts=[1.0,100],μ=5.0,U=10.0)
-println(result[1])
+result = single_site_quantities(Ts=[2],μ=-2.0,U=-4.0)
+println(result[2])
 #=
 using Plots
 
